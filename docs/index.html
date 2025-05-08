@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="generator" content="pandoc" />
+
+        <meta name="author" content="黄国政" />
+    
+        <meta name="date" content="2025-05-09" />
+    
+    <title>孤独感与网络行为的因果关系——结合 R 语言与 Copilot 对 CFPS2022 数据的实证分析</title>
+
+        <script src="index_files/header-attrs-2.25/header-attrs.js"></script>
+        <script src="index_files/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link href="index_files/bootstrap-3.3.7/css/bootstrap.min.css" rel="stylesheet" />
+        <script src="index_files/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+        <script src="index_files/navigation-1.1/tabsets.js"></script>
+        <link href="index_files/robobook-0.1/robobook.css" rel="stylesheet" />
+        <link href="index_files/robobook-0.1/robobook_fonts_embed.css" rel="stylesheet" />
+        <script src="index_files/robobook-0.1/robobook.js"></script>
+        <script src="index_files/htmlwidgets-1.6.2/htmlwidgets.js"></script>
+        <link href="index_files/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
+        <script src="index_files/datatables-binding-0.30/datatables.js"></script>
+        <link href="index_files/dt-core-1.13.4/css/jquery.dataTables.min.css" rel="stylesheet" />
+        <link href="index_files/dt-core-1.13.4/css/jquery.dataTables.extra.css" rel="stylesheet" />
+        <script src="index_files/dt-core-1.13.4/js/jquery.dataTables.min.js"></script>
+        <link href="index_files/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
+        <script src="index_files/crosstalk-1.2.0/js/crosstalk.min.js"></script>
+    
+    
+        <style type="text/css">code{white-space: pre;}</style>
+    <style type="text/css">
+      pre > code.sourceCode { white-space: pre; position: relative; }
+      pre > code.sourceCode > span { line-height: 1.25; }
+      pre > code.sourceCode > span:empty { height: 1.2em; }
+      .sourceCode { overflow: visible; }
+      code.sourceCode > span { color: inherit; text-decoration: inherit; }
+      div.sourceCode { margin: 1em 0; }
+      pre.sourceCode { margin: 0; }
+      @media screen {
+      div.sourceCode { overflow: auto; }
+      }
+      @media print {
+      pre > code.sourceCode { white-space: pre-wrap; }
+      pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+      }
+      pre.numberSource code
+        { counter-reset: source-line 0; }
+      pre.numberSource code > span
+        { position: relative; left: -4em; counter-increment: source-line; }
+      pre.numberSource code > span > a:first-child::before
+        { content: counter(source-line);
+          position: relative; left: -1em; text-align: right; vertical-align: baseline;
+          border: none; display: inline-block;
+          -webkit-touch-callout: none; -webkit-user-select: none;
+          -khtml-user-select: none; -moz-user-select: none;
+          -ms-user-select: none; user-select: none;
+          padding: 0 4px; width: 4em;
+          background-color: #ffffff;
+          color: #a0a0a0;
+        }
+      pre.numberSource { margin-left: 3em; border-left: 1px solid #a0a0a0;  padding-left: 4px; }
+      div.sourceCode
+        { color: #1f1c1b; background-color: #ffffff; }
+      @media screen {
+      pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+      }
+      code span { color: #1f1c1b; } /* Normal */
+      code span.al { color: #bf0303; background-color: #f7e6e6; font-weight: bold; } /* Alert */
+      code span.an { color: #ca60ca; } /* Annotation */
+      code span.at { color: #0057ae; } /* Attribute */
+      code span.bn { color: #b08000; } /* BaseN */
+      code span.bu { color: #644a9b; font-weight: bold; } /* BuiltIn */
+      code span.cf { color: #1f1c1b; font-weight: bold; } /* ControlFlow */
+      code span.ch { color: #924c9d; } /* Char */
+      code span.cn { color: #aa5500; } /* Constant */
+      code span.co { color: #898887; } /* Comment */
+      code span.cv { color: #0095ff; } /* CommentVar */
+      code span.do { color: #607880; } /* Documentation */
+      code span.dt { color: #0057ae; } /* DataType */
+      code span.dv { color: #b08000; } /* DecVal */
+      code span.er { color: #bf0303; text-decoration: underline; } /* Error */
+      code span.ex { color: #0095ff; font-weight: bold; } /* Extension */
+      code span.fl { color: #b08000; } /* Float */
+      code span.fu { color: #644a9b; } /* Function */
+      code span.im { color: #ff5500; } /* Import */
+      code span.in { color: #b08000; } /* Information */
+      code span.kw { color: #1f1c1b; font-weight: bold; } /* Keyword */
+      code span.op { color: #1f1c1b; } /* Operator */
+      code span.ot { color: #006e28; } /* Other */
+      code span.pp { color: #006e28; } /* Preprocessor */
+      code span.re { color: #0057ae; background-color: #e0e9f8; } /* RegionMarker */
+      code span.sc { color: #3daee9; } /* SpecialChar */
+      code span.ss { color: #ff5500; } /* SpecialString */
+      code span.st { color: #bf0303; } /* String */
+      code span.va { color: #0057ae; } /* Variable */
+      code span.vs { color: #bf0303; } /* VerbatimString */
+      code span.wa { color: #bf0303; } /* Warning */
+    </style>
+    
+        <link rel="stylesheet" href="Static/font.css" type="text/css" />
+    
+    <!-- tabsets -->
+    <script>
+      $(document).ready(function () {
+	  window.buildTabsets("toc");
+      });
+      $(document).ready(function () {
+	  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+	      $(this).parent().toggleClass('nav-tabs-open')
+	  });
+      });
+    </script>
+
+    <!-- code folding -->
+    
+    <!-- code download -->
+    
+    <!-- tabsets dropdown -->
+
+    <style type="text/css">
+      .tabset-dropdown > .nav-tabs {
+	  display: inline-table;
+	  max-height: 500px;
+	  min-height: 44px;
+	  overflow-y: auto;
+	  background: white;
+	  border: 1px solid #ddd;
+	  border-radius: 4px;
+      }
+      
+      .tabset-dropdown > .nav-tabs > li.active:before {
+	  content: "";
+	  font-family: 'Glyphicons Halflings';
+	  display: inline-block;
+	  padding: 10px;
+	  border-right: 1px solid #ddd;
+      }
+      
+      .tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+	  content: "&#xe258;";
+	  border: none;
+      }
+      
+      .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+	  content: "";
+	  font-family: 'Glyphicons Halflings';
+	  display: inline-block;
+	  padding: 10px;
+	  border-right: 1px solid #ddd;
+      }
+      
+      .tabset-dropdown > .nav-tabs > li.active {
+	  display: block;
+      }
+
+      .tabset-dropdown > .nav-tabs > li.active a {
+  	  padding: 0 15px !important;
+      }
+
+      .tabset-dropdown > .nav-tabs > li > a,
+      .tabset-dropdown > .nav-tabs > li > a:focus,
+      .tabset-dropdown > .nav-tabs > li > a:hover {
+	  border: none;
+	  display: inline-block;
+	  border-radius: 4px;
+	  background-color: transparent;
+      }
+      
+      .tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+	  display: block;
+	  float: none;
+      }
+      
+      .tabset-dropdown > .nav-tabs > li {
+	  display: none;
+	  margin-left: 0 !important;
+      }
+    </style>
+    
+</head>
+
+<body class="preload">
+
+   	
+            <!-- robobook start -->   
+   <div class="book with-summary">
+      <div class="book-summary">
+        <ul>
+          <li class="title">孤独感与网络行为的因果关系——结合 R 语言与
+Copilot 对 CFPS2022 数据的实证分析</li>
+          <li class="divider"></li>
+        </ul>
+        <nav role="navigation" id="toc">
+          <ul>
+          <li><a
+          href="#%E4%B8%80%E5%9C%A8-rstudio-%E4%B8%AD%E5%90%AF%E7%94%A8-github-copilot"
+          id="toc-一在-rstudio-中启用-github-copilot">一、在 Rstudio
+          中启用 GitHub Copilot</a></li>
+          <li><a
+          href="#%E4%BA%8C%E5%BD%95%E5%85%A5%E6%95%B0%E6%8D%AE%E4%B8%8E%E9%80%89%E5%8F%96%E5%8F%98%E9%87%8F"
+          id="toc-二录入数据与选取变量">二、录入数据与选取变量</a>
+          <ul>
+          <li><a href="#%E5%BD%95%E5%85%A5%E6%95%B0%E6%8D%AE"
+          id="toc-录入数据">2.1 录入数据</a></li>
+          <li><a
+          href="#%E9%80%89%E5%8F%96%E7%9B%B8%E5%85%B3%E5%8F%98%E9%87%8F"
+          id="toc-选取相关变量">2.2 选取相关变量</a></li>
+          </ul></li>
+          <li><a
+          href="#%E4%B8%89%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E4%B8%8E%E5%B1%95%E7%A4%BA"
+          id="toc-三数据处理与展示">三、数据处理与展示</a>
+          <ul>
+          <li><a
+          href="#%E7%BC%BA%E5%A4%B1%E5%80%BC%E4%B8%8E%E5%BC%82%E5%B8%B8%E5%80%BC"
+          id="toc-缺失值与异常值">3.1 缺失值与异常值</a></li>
+          </ul></li>
+          <li><a
+          href="#%E5%9B%9B%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90%E5%9B%A0%E6%9E%9C%E6%8E%A8%E6%96%AD"
+          id="toc-四数据分析因果推断">四、数据分析：因果推断</a></li>
+          <li><a href="#%E4%BA%94%E7%BB%93%E8%AE%BA"
+          id="toc-五结论">五、结论</a></li>
+          <li><a href="#%E5%85%AD%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"
+          id="toc-六参考资料">六、参考资料</a></li>
+          </ul>
+        </nav>
+        <ul class="authors">
+          <li class="divider"></li>
+                                <li><span><i class="glyphicon glyphicon-user"></i> 黄国政</span></li>
+                                         <li><span><i class="glyphicon glyphicon-calendar"></i> 2025-05-09</span></li>
+                  </ul>     
+      </div>
+      <div class="book-body fixed">
+        <div class="body-inner">
+            <a class="btn pull-left js-toolbar-action toggle-sidebar" aria-label="Toggle Sidebar" title="Toggle Sidebar" href="#">
+              <span class="glyphicon glyphicon-menu-hamburger"></span>
+            </a>
+            <div class="page-inner">
+              <section id="content" class="normal">
+      
+   
+        
+      <h1 class="title">孤独感与网络行为的因果关系——结合 R 语言与
+Copilot 对 CFPS2022 数据的实证分析</h1>
+      
+        
+
+   
+      
+   
+<!-- Don't indent these lines or it will mess pre blocks indentation --> 
+<div id="一在-rstudio-中启用-github-copilot" class="section level1">
+<h1>一、在 Rstudio 中启用 GitHub Copilot</h1>
+<p>本文将在 Rstudio 中使用 GitHub Copilot
+来完成数据分析的工作，通过因果关系推断来研究孤独感与网络行为之间的关系，需要使用的相关资源如下：</p>
+<ol style="list-style-type: decimal">
+<li>R 语言
+<ul>
+<li>R 语言的安装包可以在 <a href="https://cran.r-project.org/">CRAN</a>
+上下载。</li>
+</ul></li>
+<li>Rstudio
+<ul>
+<li>Rstudio 的安装包可以在 <a
+href="https://posit.co/download/rstudio-desktop/">Rstudio</a>
+上下载。注意：2024 年 9 月份以后的 Rstudio 版本自带 GitHub
+Copilot，因此在安装 Rstudio 时选择最新版本即可。</li>
+</ul></li>
+<li>GitHub 账号
+<ul>
+<li>网站如下：<a href="https://github.com/"
+class="uri">https://github.com/</a></li>
+</ul></li>
+<li>CFPS2022 数据集
+<ul>
+<li>数据集可以在 <a href="http://www.isss.pku.edu.cn/cfps/">CFPS</a>
+上下载。注意：CFPS2022数据集需要申请账号才能下载。</li>
+</ul></li>
+</ol>
+<p>在 Rstudio 中，Copilot 的提示词（prompt）以 <code># + 文本</code>
+的形式进行表示，并放置于代码块中，示例如下：</p>
+<pre><code># 这是一个放置于代码块中的提示词。</code></pre>
+</div>
+<div id="二录入数据与选取变量" class="section level1">
+<h1>二、录入数据与选取变量</h1>
+<div id="录入数据" class="section level2">
+<h2>2.1 录入数据</h2>
+<p>CFPS2022 数据集包含五份数据，其中有四份数据文件分别对应四份问卷。</p>
+<table>
+<thead>
+<tr>
+<th>问卷部分</th>
+<th>数据文件</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2022 家庭成员问卷</td>
+<td>cfps2022famconf_202410.dta</td>
+</tr>
+<tr>
+<td>2022 家庭经济问卷</td>
+<td>cfps2022famecon_202410.dta</td>
+</tr>
+<tr>
+<td>2022 个人自答问卷</td>
+<td>cfps2022person_202410.dta</td>
+</tr>
+<tr>
+<td>2022 少儿家长自答问卷</td>
+<td>cfps2022childproxy_202410.dta</td>
+</tr>
+<tr>
+<td>2022 个人代答问卷</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>我们需要使用的是「2022
+个人自答问卷」数据集，即「cfps2022person_202410.dta」，该数据集包含了个人的孤独感和网络行为的相关变量。</p>
+<p>提示词1如下：</p>
+<pre><code># 提示词1：将 cfps2022person_202410.dta 数据集导入到 R 中，并将该数据集命名为 cfps2022p</code></pre>
+<p>Copilot 根据提示词提供的代码如下：</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">library</span>(haven)</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>cfps2022p <span class="ot">&lt;-</span> <span class="fu">read_dta</span>(<span class="st">&quot;Data/cfps2022person_202410.dta&quot;</span>)</span></code></pre></div>
+<p>在 Copilot 提供的代码中，<code>library(haven)</code> 是用于加载
+<code>haven</code> 包的代码，<code>read_dta()</code> 是用于读取 Stata
+数据文件的函数。</p>
+<p>如果想大致浏览 cfps2022p 中的数据信息，也可直接向 Copilot
+提供相关提示词。</p>
+<pre><code># 提示词2：查看 cfps2022p 的前几行数据信息</code></pre>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">head</span>(cfps2022p)</span></code></pre></div>
+<pre><code>## # A tibble: 6 × 1,283
+##   pid       code     fid22  fid20  fid18  fid16        fid14        fid12       
+##   &lt;dbl+lbl&gt; &lt;dbl+lb&gt; &lt;dbl+&gt; &lt;dbl+&gt; &lt;dbl+&gt; &lt;dbl+lbl&gt;    &lt;dbl+lbl&gt;    &lt;dbl+lbl&gt;   
+## 1 100051501 501      100051 100051 100051 100051     … 100051     …     -8 [不…
+## 2 100051502 502      100051 100051 100051 100051     … 100051     …     -8 [不…
+## 3 110043107 107      100051 100051 100051 100051     … 100051     … 110043     …
+## 4 110147102 102      100125 100125 100125 100125     … 100125     … 110147     …
+## 5 100160601 601      100160 100160 100160     -8 [不…     -8 [不…     -8 [不…
+## 6 120009102 102      100160 100160 100160 100160     … 100160     … 120009     …
+## # ℹ 1,275 more variables: fid10 &lt;dbl+lbl&gt;, fid_base &lt;dbl+lbl&gt;, age &lt;dbl+lbl&gt;,
+## #   gender &lt;dbl+lbl&gt;, pid_a_f &lt;dbl+lbl&gt;, pid_a_m &lt;dbl+lbl&gt;, selfrpt &lt;dbl+lbl&gt;,
+## #   proxyrpt &lt;dbl+lbl&gt;, proxy_iwmode &lt;dbl+lbl&gt;, self_iwmode &lt;dbl+lbl&gt;,
+## #   interrupt &lt;dbl+lbl&gt;, proxytype &lt;dbl&gt;, subsample &lt;dbl+lbl&gt;,
+## #   subpopulation &lt;dbl+lbl&gt;, psu &lt;dbl+lbl&gt;, rswt_natcs22n &lt;dbl+lbl&gt;,
+## #   rswt_natpn1022n &lt;dbl+lbl&gt;, provcd22 &lt;dbl+lbl&gt;, countyid22 &lt;dbl+lbl&gt;,
+## #   cid22 &lt;dbl+lbl&gt;, urban22 &lt;dbl+lbl&gt;, respc1pid &lt;dbl&gt;, tb6_a22_p &lt;dbl+lbl&gt;, …</code></pre>
+<p>根据「个人孤独感与网络行为」这一研究主题，我们需要选出分别代表「孤独感」和「网络行为」的两类变量。</p>
+<pre><code># 提示词3：将数据集 cfps2022p 中与「孤独感」和「网络行为」相关的变量选出</code></pre>
+<pre><code># 选取与孤独感相关的变量
+loneliness_vars &lt;- c(&quot;loneliness&quot;, &quot;loneliness_1&quot;, &quot;loneliness_2&quot;, &quot;loneliness_3&quot;, &quot;loneliness_4&quot;)
+# 选取与网络行为相关的变量
+internet_vars &lt;- c(&quot;internet_use&quot;, &quot;internet_time&quot;, &quot;internet_type&quot;, &quot;internet_frequency&quot;)
+# 选取与孤独感和网络行为相关的变量
+selected_vars &lt;- c(loneliness_vars, internet_vars)
+# 创建新的数据集
+cfps2022_selected &lt;- cfps2022p[, selected_vars]</code></pre>
+<p>Copilot 犯下了 AI 一般都会犯的错误，如同找文献时 AI
+可能会编造不存在的文献，在找变量这件事情上，Copilot
+也会根据上下文编造数据集中不存在的变量。</p>
+<p>可见，Copilot
+还没有智能到足以完成如此抽象、复杂的工作，因此我们需要对照 CFPS2022
+汇总问卷（个人自答部分中的「U部分 网络模块」和「Q部分
+行为与精神状态」），在数据集中自行选择出合适的变量后，再将相关的具体任务交给
+Copilot 来完成。</p>
+</div>
+<div id="选取相关变量" class="section level2">
+<h2>2.2 选取相关变量</h2>
+<p>录入 cfps2022p 后，可以在右下角的 Environment 部分中的 Data
+查看数据集的变量名称，直接点击 cfps2022p 即可查看该数据集的情况。</p>
+<p><img src="Static/pic-1.png" style="width:100.0%" /></p>
+<p>我暂时还没找到更高效的方式以快速检索出与「孤独感」和「网络行为」相关的变量，只好在数据集中手动查找，如下图所示。</p>
+<table>
+<colgroup>
+<col width="50%" />
+<col width="50%" />
+</colgroup>
+<thead>
+<tr>
+<th align="center"><img src="Static/pic-2.png"
+style="width:100.0%" /></th>
+<th align="center"><img src="Static/pic-3.png"
+style="width:100.0%" /></th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
+<p>接下来将「网络行为」和「孤独感」两类变量集中在新的数据集中。</p>
+<pre><code># 提示词4：利用 `tidyverse` 包，先将数据集 cfps2022p 中代表「网络行为」变量的 `qu201` 至 `qu955` 选出，再将代表「孤独感」变量的 `qn406` 至 `qn420` 选出，最后将以上变量归于一个数据集，并命名为 cfps2022_p</code></pre>
+<pre><code>library(tidyverse)
+# 选取与网络行为相关的变量
+internet_vars &lt;- c(&quot;qu201&quot;, &quot;qu202&quot;, &quot;qu203&quot;, &quot;qu204&quot;, &quot;qu205&quot;, &quot;qu206&quot;, &quot;qu207&quot;, &quot;qu208&quot;, &quot;qu209&quot;, &quot;qu210&quot;, &quot;qu211&quot;, &quot;qu212&quot;, &quot;qu213&quot;, &quot;qu214&quot;, &quot;qu215&quot;, &quot;qu216&quot;, &quot;qu217&quot;, &quot;qu218&quot;, &quot;qu219&quot;, &quot;qu220&quot;, &quot;qu221&quot;, &quot;qu222&quot;, &quot;qu223&quot;, &quot;qu224&quot;, &quot;qu225&quot;)
+# 选取与孤独感相关的变量
+loneliness_vars &lt;- c(&quot;qn406&quot;, &quot;qn407&quot;, &quot;qn408&quot;, &quot;qn409&quot;, &quot;qn410&quot;, &quot;qn411&quot;, &quot;qn412&quot;, &quot;qn413&quot;, &quot;qn414&quot;, &quot;qn415&quot;, &quot;qn416&quot;, &quot;qn417&quot;, &quot;qn418&quot;, &quot;qn419&quot;, &quot;qn420&quot;)
+# 选取与孤独感和网络行为相关的变量
+selected_vars &lt;- c(internet_vars, loneliness_vars)
+# 创建新的数据集
+cfps2022_p &lt;- cfps2022p %&gt;% select(all_of(selected_vars))</code></pre>
+<pre><code>Error in `all_of()`:
+! Can&#39;t subset columns that don&#39;t exist.
+✖ Columns `qu203`, `qu204`, `qu205`, `qu206`, `qu207`, etc. don&#39;t exist.
+Backtrace:
+1. cfps2022p %&gt;% select(all_of(selected_vars))
+2. tidyselect::all_of(selected_vars)</code></pre>
+<p>但是经过与数据集的对比检查后发现，在「网络行为」这一变量中，Copilot
+编造了 <code>qu203</code> 至 <code>qu225</code> 的变量，并遗漏了变量
+<code>qu201a</code>、<code>qu202a</code>、<code>qu91</code>、<code>qu911</code>、<code>qu92</code>、<code>qu921</code>、<code>qu93</code>、<code>qu931</code>、<code>qu94</code>、<code>qu941</code>、<code>qu5</code>、<code>qu501</code>、<code>qu11</code>、<code>qu111</code>、<code>qu951</code>、<code>qu952</code>、<code>qu953</code>、<code>qu954</code>、<code>qu955</code>；在「孤独感」这一变量中，则编造了
+<code>qn408</code>、<code>qn409</code>、<code>qn410</code>、<code>qn413</code>、<code>qn415</code>、<code>qn417</code>
+和 <code>qn419</code>。这些变量都是不存在的，因此运行会报错。</p>
+<p>事实上，当在编辑页面手动输入相关变量，Copilot
+会按数字递增的逻辑规律进行补全，这意味着如果相邻变量之间的名称差异较大，Copilot
+无法提供准确的代码。</p>
+<p>可以据此更改更具体的提示词，让 Copilot 提供正确的代码：</p>
+<pre><code># 提示词5：「网络行为」相关的变量包含 `qu201`、`qu202`、`qu201a`、`qu202a`、`qu91`、`qu911`、`qu92`、`qu921`、`qu93`、`qu931`、`qu94`、`qu941`、`qu5`、`qu501`、`qu11`、`qu111`、`qu951`、`qu952`、`qu953`、`qu954`、`qu955` 几个变量；「孤独感」相关的变量包含 `qn406`、`qn407`、`qn411`、`qn412`、`qn414`、`qn416`、`qn418` 和 `qn420`，利用 `tidyverse` 包，从 cfps2022p 选取以上变量，并创建一个新的数据集 cfps2022_p</code></pre>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div>
+<pre><code>## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+## ✔ dplyr     1.1.3     ✔ readr     2.1.4
+## ✔ forcats   1.0.0     ✔ stringr   1.5.0
+## ✔ ggplot2   3.4.4     ✔ tibble    3.2.1
+## ✔ lubridate 1.9.3     ✔ tidyr     1.3.0
+## ✔ purrr     1.0.2     
+## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+## ✖ dplyr::filter() masks stats::filter()
+## ✖ dplyr::lag()    masks stats::lag()
+## ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a><span class="co"># 选取与网络行为相关的变量</span></span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a>internet_vars <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;qu201&quot;</span>, <span class="st">&quot;qu202&quot;</span>, <span class="st">&quot;qu201a&quot;</span>, <span class="st">&quot;qu202a&quot;</span>, <span class="st">&quot;qu91&quot;</span>, <span class="st">&quot;qu911&quot;</span>, <span class="st">&quot;qu92&quot;</span>, <span class="st">&quot;qu921&quot;</span>, <span class="st">&quot;qu93&quot;</span>, <span class="st">&quot;qu931&quot;</span>, <span class="st">&quot;qu94&quot;</span>, <span class="st">&quot;qu941&quot;</span>, <span class="st">&quot;qu5&quot;</span>, <span class="st">&quot;qu501&quot;</span>, <span class="st">&quot;qu11&quot;</span>, <span class="st">&quot;qu111&quot;</span>, <span class="st">&quot;qu951&quot;</span>, <span class="st">&quot;qu952&quot;</span>, <span class="st">&quot;qu953&quot;</span>, <span class="st">&quot;qu954&quot;</span>, <span class="st">&quot;qu955&quot;</span>)</span>
+<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a><span class="co"># 选取与孤独感相关的变量</span></span>
+<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a>loneliness_vars <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;qn406&quot;</span>, <span class="st">&quot;qn407&quot;</span>, <span class="st">&quot;qn411&quot;</span>, <span class="st">&quot;qn412&quot;</span>, <span class="st">&quot;qn414&quot;</span>, <span class="st">&quot;qn416&quot;</span>, <span class="st">&quot;qn418&quot;</span>, <span class="st">&quot;qn420&quot;</span>)</span>
+<span id="cb15-5"><a href="#cb15-5" tabindex="-1"></a><span class="co"># 选取与孤独感和网络行为相关的变量</span></span>
+<span id="cb15-6"><a href="#cb15-6" tabindex="-1"></a>selected_vars <span class="ot">&lt;-</span> <span class="fu">c</span>(internet_vars, loneliness_vars)</span>
+<span id="cb15-7"><a href="#cb15-7" tabindex="-1"></a><span class="co"># 创建新的数据集</span></span>
+<span id="cb15-8"><a href="#cb15-8" tabindex="-1"></a>cfps2022_p <span class="ot">&lt;-</span> cfps2022p <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="fu">all_of</span>(selected_vars))</span></code></pre></div>
+<p>这时候在 Rstudio 界面右下角处的 Environment 中已经出现了新的数据集
+cfps2022_p，说明成功提取出相关变量并形成新的数据集。</p>
+<p>可以尝试给 Copilot
+更复杂的任务，例如将选出的变量进一步语义化，以方便后续分析。</p>
+<pre><code># 提示词6：将数据集 cfps2022_p 中的所有变量进行语义化处理，形成新的数据集 cfps2022_pre</code></pre>
+<pre><code># 语义化处理
+cfps2022_pre &lt;- cfps2022_p %&gt;%
+  rename(
+    internet_use = qu201,
+    internet_time = qu202,
+    internet_type = qu201a,
+    internet_frequency = qu202a,
+    loneliness_1 = qn406,
+    loneliness_2 = qn407,
+    loneliness_3 = qn411,
+    loneliness_4 = qn412,
+    loneliness_5 = qn414,
+    loneliness_6 = qn416,
+    loneliness_7 = qn418,
+    loneliness_8 = qn420
+  )</code></pre>
+<p>从中可以看出，Copilot
+无法根据变量含义进行具体的语义化，重命名过程中也没有囊括数据集中的所有变量，可以在此基础上手动进行修改。</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a>cfps2022_pre <span class="ot">&lt;-</span> cfps2022_p <span class="sc">%&gt;%</span></span>
+<span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a>  <span class="fu">rename</span>(</span>
+<span id="cb18-3"><a href="#cb18-3" tabindex="-1"></a>    <span class="at">inter_phone =</span> qu201,</span>
+<span id="cb18-4"><a href="#cb18-4" tabindex="-1"></a>    <span class="at">inter_computer =</span> qu202,</span>
+<span id="cb18-5"><a href="#cb18-5" tabindex="-1"></a>    <span class="at">inter_phone_time =</span> qu201a,</span>
+<span id="cb18-6"><a href="#cb18-6" tabindex="-1"></a>    <span class="at">inter_computer_time =</span> qu202a,</span>
+<span id="cb18-7"><a href="#cb18-7" tabindex="-1"></a>    <span class="at">computer_game =</span> qu91,</span>
+<span id="cb18-8"><a href="#cb18-8" tabindex="-1"></a>    <span class="at">computer_game_day =</span> qu911,</span>
+<span id="cb18-9"><a href="#cb18-9" tabindex="-1"></a>    <span class="at">inter_shop =</span> qu92,</span>
+<span id="cb18-10"><a href="#cb18-10" tabindex="-1"></a>    <span class="at">inter_shop_day =</span> qu921,</span>
+<span id="cb18-11"><a href="#cb18-11" tabindex="-1"></a>    <span class="at">video =</span> qu93,</span>
+<span id="cb18-12"><a href="#cb18-12" tabindex="-1"></a>    <span class="at">video_day =</span> qu931,</span>
+<span id="cb18-13"><a href="#cb18-13" tabindex="-1"></a>    <span class="at">inter_study =</span> qu94,</span>
+<span id="cb18-14"><a href="#cb18-14" tabindex="-1"></a>    <span class="at">inter_study_day =</span> qu941,</span>
+<span id="cb18-15"><a href="#cb18-15" tabindex="-1"></a>    <span class="at">study_online =</span> qu5,</span>
+<span id="cb18-16"><a href="#cb18-16" tabindex="-1"></a>    <span class="at">study_online_time =</span> qu501,</span>
+<span id="cb18-17"><a href="#cb18-17" tabindex="-1"></a>    <span class="at">wechat =</span> qu11,</span>
+<span id="cb18-18"><a href="#cb18-18" tabindex="-1"></a>    <span class="at">we_moment_fre =</span> qu111,</span>
+<span id="cb18-19"><a href="#cb18-19" tabindex="-1"></a>    <span class="at">inter_work_import =</span> qu951,</span>
+<span id="cb18-20"><a href="#cb18-20" tabindex="-1"></a>    <span class="at">inter_enter_import =</span> qu952,</span>
+<span id="cb18-21"><a href="#cb18-21" tabindex="-1"></a>    <span class="at">inter_famfrien_import =</span> qu953,</span>
+<span id="cb18-22"><a href="#cb18-22" tabindex="-1"></a>    <span class="at">inter_study_import =</span> qu954,</span>
+<span id="cb18-23"><a href="#cb18-23" tabindex="-1"></a>    <span class="at">inter_daily_import =</span> qu955,</span>
+<span id="cb18-24"><a href="#cb18-24" tabindex="-1"></a>    <span class="at">down_feel =</span> qn406,</span>
+<span id="cb18-25"><a href="#cb18-25" tabindex="-1"></a>    <span class="at">hard_feel =</span> qn407,</span>
+<span id="cb18-26"><a href="#cb18-26" tabindex="-1"></a>    <span class="at">bad_sleep =</span> qn411,</span>
+<span id="cb18-27"><a href="#cb18-27" tabindex="-1"></a>    <span class="at">happy_feel =</span> qn412,</span>
+<span id="cb18-28"><a href="#cb18-28" tabindex="-1"></a>    <span class="at">lonely_feel =</span> qn414,</span>
+<span id="cb18-29"><a href="#cb18-29" tabindex="-1"></a>    <span class="at">life_happy =</span> qn416,</span>
+<span id="cb18-30"><a href="#cb18-30" tabindex="-1"></a>    <span class="at">sad_feel =</span> qn418,</span>
+<span id="cb18-31"><a href="#cb18-31" tabindex="-1"></a>    <span class="at">overwhelm_hard =</span> qn420</span>
+<span id="cb18-32"><a href="#cb18-32" tabindex="-1"></a>  )</span></code></pre></div>
+</div>
+</div>
+<div id="三数据处理与展示" class="section level1">
+<h1>三、数据处理与展示</h1>
+<p>选取出合适的变量后，可以着手对数据进行缺失值和异常值的处理，并进行描述统计的可视化展示。</p>
+<div id="缺失值与异常值" class="section level2">
+<h2>3.1 缺失值与异常值</h2>
+<pre><code># 提示词7：查看数据集 cfps2022_pre 中的缺失值，展示各变量的缺失值数量，并以 `DT` 包进行交互式展示</code></pre>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a><span class="fu">library</span>(DT)</span>
+<span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a><span class="co"># 查看缺失值</span></span>
+<span id="cb20-3"><a href="#cb20-3" tabindex="-1"></a>missing_values <span class="ot">&lt;-</span> cfps2022_pre <span class="sc">%&gt;%</span></span>
+<span id="cb20-4"><a href="#cb20-4" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="fu">across</span>(<span class="fu">everything</span>(), <span class="sc">~</span> <span class="fu">sum</span>(<span class="fu">is.na</span>(.)))) <span class="sc">%&gt;%</span></span>
+<span id="cb20-5"><a href="#cb20-5" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="fu">everything</span>(), <span class="at">names_to =</span> <span class="st">&quot;variable&quot;</span>, <span class="at">values_to =</span> <span class="st">&quot;missing_count&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb20-6"><a href="#cb20-6" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(missing_count))</span>
+<span id="cb20-7"><a href="#cb20-7" tabindex="-1"></a><span class="co"># 交互式展示</span></span>
+<span id="cb20-8"><a href="#cb20-8" tabindex="-1"></a><span class="fu">datatable</span>(missing_values, <span class="at">options =</span> <span class="fu">list</span>(<span class="at">pageLength =</span> <span class="dv">10</span>), <span class="at">rownames =</span> <span class="cn">FALSE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb20-9"><a href="#cb20-9" tabindex="-1"></a>  <span class="fu">formatStyle</span>(<span class="st">&quot;missing_count&quot;</span>, <span class="at">backgroundColor =</span> <span class="st">&quot;lightblue&quot;</span>)</span></code></pre></div>
+<div class="datatables html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-56f14a6cb179cdc282ca" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-56f14a6cb179cdc282ca">{"x":{"filter":"none","vertical":false,"data":[["inter_phone","inter_computer","inter_phone_time","inter_computer_time","computer_game","computer_game_day","inter_shop","inter_shop_day","video","video_day","inter_study","inter_study_day","study_online","study_online_time","wechat","we_moment_fre","inter_work_import","inter_enter_import","inter_famfrien_import","inter_study_import","inter_daily_import","down_feel","hard_feel","bad_sleep","happy_feel","lonely_feel","life_happy","sad_feel","overwhelm_hard"],[3336,3336,3336,3336,3336,3336,3336,3336,3336,3336,3336,3336,3336,3336,3336,3336,3336,3336,3336,3336,3336,3336,3336,3336,3336,3336,3336,3336,3336]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>variable<\/th>\n      <th>missing_count<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":10,"columnDefs":[{"className":"dt-right","targets":1}],"order":[],"autoWidth":false,"orderClasses":false,"rowCallback":"function(row, data, displayNum, displayIndex, dataIndex) {\nvar value=data[1]; $(this.api().cell(row, 1).node()).css({'background-color':'lightblue'});\n}"}},"evals":["options.rowCallback"],"jsHooks":[]}</script>
+</div>
+</div>
+<div id="四数据分析因果推断" class="section level1">
+<h1>四、数据分析：因果推断</h1>
+</div>
+<div id="五结论" class="section level1">
+<h1>五、结论</h1>
+</div>
+<div id="六参考资料" class="section level1">
+<h1>六、参考资料</h1>
+<ol style="list-style-type: decimal">
+<li>王敏杰：数据科学中的 R 语言,BOOKDOWN, 2024-10-28, <a
+href="https://bookdown.org/wangminjie/R4DS/"
+class="uri">https://bookdown.org/wangminjie/R4DS/</a></li>
+<li>庄亮亮：R Markdown 入门教程, 统计之都, 2021-04-10, <a
+href="https://cosx.org/2021/04/rmarkdown-introduction/"
+class="uri">https://cosx.org/2021/04/rmarkdown-introduction/</a></li>
+</ol>
+</div>
+
+   
+   
+           </section>
+  </div>
+  </div>
+  </div>
+  </div>
+      
+      
+
+  <script>
+    $(document).ready(function () {
+
+		// add bootstrap table styles to pandoc tables
+	$('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+		
+ 		
+	    });
+  </script>
+
+
+
+    <!-- dynamically load mathjax for compatibility with self-contained -->
+  <script>
+    (function () {
+	var script = document.createElement("script");
+	script.type = "text/javascript";
+	script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+	document.getElementsByTagName("head")[0].appendChild(script);
+    })();
+  </script>
+  
+</body>
+</html>

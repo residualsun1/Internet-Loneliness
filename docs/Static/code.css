@@ -1,0 +1,41 @@
+/* 代码块样式 */
+pre {
+  margin: 0.5em 0;
+  border: 1px solid #ddd;
+  box-shadow: 5px 5px 5px #eee;
+  overflow-x: auto;
+  padding: 1em;
+}
+
+/* 预格式化文本中的代码样式 */
+pre code {
+  background: none;
+  display: block;
+  padding: .5em;
+  word-wrap: break-word;
+  word-break: break-word;
+}
+
+/* 代码行内样式 */
+code {
+  background: #f9f9f9;
+  padding: 2px 4px;
+  font-family: Consolas, Courier, 'Courier New', FandolKai, monospace;
+  hyphens: none;
+}
+
+p code {
+  background-color: #f0f0f0;
+  padding: 2px 4px;
+  border-radius: 5px;
+}
+
+/* 高亮代码块容器 */
+.highlight {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.highlight pre {
+  padding: 7px;
+}
