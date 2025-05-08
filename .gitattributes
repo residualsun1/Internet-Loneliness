@@ -1,3 +1,4 @@
 Data/*.dta filter=lfs diff=lfs merge=lfs -text
 Data/cfps2022person_202410.dta filter=lfs diff=lfs merge=lfs -text
+docs/Data/* filter=lfs diff=lfs merge=lfs -text
 docs/Data/cfps2022person_202410.dta filter=lfs diff=lfs merge=lfs -text
